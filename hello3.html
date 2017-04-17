@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class 与 Style 绑定</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+<!--<div id="app-1" :class="{ active: isActive, gg: isGg }" class="static">hello</div>-->
+<!--<div id="app-1" :class="classObject" class="static">hello</div>-->
+<!--<div id="app-1" :class="classObject2" class="static">hello</div>-->
+<!--<div id="app-1" :class="[activek, ggk]" class="static">hello</div>-->
+<!--<div id="app-1" :class="[{active: isActive}, ggk]" class="static">hello</div>-->
+<div id="app-1">
+    <my-component v-bind:class="[{active: isActive}, ggk]" class="static"></my-component>
+    <div :style="[styleObject, styleObject2]">v-bind:style and :style</div>
+</div>
+<script>
+    Vue.component('my-component', {
+        template: '<p class="foo bar">Hi</p>'
+    })
+    var vm1 = new Vue({
+        el: '#app-1',
+        data: {
+            isActive: true,
+            isGg: true,
+            activek: 'active',
+            'ggk': 'gg',
+            classObject: {
+                active: true,
+                'gg': true
+            },
+            styleObject: {
+                color: 'red',
+                fontSize: '30px'
+            }
+        },
+        computed: {
+            classObject2: function () {
+                return {
+                    active: this.isActive,
+                    gg: this.isGg
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>

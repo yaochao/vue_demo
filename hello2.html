@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实例</title>
+    <script src="vue.js"></script>
+    <script src="axios.js"></script>
+</head>
+<body>
+<div id="example">
+    {{ b }}
+    <span v-once>this will never change: {{ a }}</span>
+    <div v-html="b">{{ b }}</div>
+</div>
+<div v-bind:id="dynamicId" class="example2">
+    {{ b }}
+</div>
+<button id="btn" v-bind:disabled="someDynamicCondition" v-on:click="onClick">Button</button>
+<div id="js-expression">{{ message + reverseMessage }} {{ message | capitalize }} {{ uppercase(message) }} {{ message |
+    linkstr('hello', message) | capitalize | suffix | prefix }}
+</div>
+<div id="short-write">
+    <p :title="message">鼠标停在上面，查看title</p>
+    <p>{{ hello }}</p>
+    <button @click="onClick">点击我</button>
+</div>
+<div id="computed-property">
+    <p>{{ message }}</p>
+    <p>{{ message2 }}</p>
+    <p>{{ message3 }}</p>
+    <br>
+    <p>{{ address }}</p>
+    <input v-model="ip">
+</div>
+<script>
+    var vm = new Vue({
+        // 选项
+    })
+    var MyComponent = Vue.extend({
+        //扩展选项
+    })
+    // 所有的 MyComponent 实例都将以预定义的扩展选项创建
+    var myComponent = new MyComponent()
+    var data = {a: 1, b: 0}
+    var vm = new Vue({
+        el: '#example',
+        data: data,
+        watch: {
+            a: function (newVal, oldVal) {
+                console.log(newVal)
+                console.log(oldVal)
+            }
+        },
+        created: function () {
+            // this 指向vm实例
+            console.log('date is ' + new Date())
+        }
+    })
+    vm.$watch('a', function (newVal, oldVal) {
+        data.b = 'new:' + newVal + ' old:' + oldVal
+    })
+    var vm2 = new Vue({
+        el: '.example2',
+        data: {
+            dynamicId: 'example',
+            b: 'hello b'
+        }
+    })
+    var vm3 = new Vue({
+        el: '#btn',
+        data: {
+            someDynamicCondition: false
+        },
+        methods: {
+            onClick: function () {
+                this.someDynamicCondition = true
+            }
+        }
+    })
+
+    var vm4 = new Vue({
+        el: '#js-expression',
+        data: {
+            message: 'yaochao'
+        },
+        computed: {
+            reverseMessage: function () {
+                return this.message.split('').reverse().join('')
+            }
+        },
+        methods: {
+            uppercase: function (param) {
+                if (!param) {
+                    return ''
+                }
+                param = param.split('')
+                var param2 = new Array()
+                for (var i in param) {
+                    param[i] = param[i].toUpperCase()
+                    param2.push(param[i])
+                }
+                return param2.join('')
+            }
+        },
+        filters: {
+            capitalize: function (v) {
+                if (!v) return ''
+                v = v.toString()
+                return v.charAt(0).toUpperCase() + v.slice(1)
+            },
+            linkstr: function (v1, v2, v3) {
+                return v1 + v2 + v3
+            },
+            suffix: function (v) {
+                return v + ' --- 我是小尾巴'
+            },
+            prefix: function (v) {
+                return '我是头啊 --- ' + v
+            }
+        },
+    })
+    var vm5 = new Vue({
+        el: '#short-write',
+        data: {
+            message: '这个title是通过缩写"v-bind:title"为":title"的样式呈现的',
+            hello: 'hello'
+        },
+        methods: {
+            onClick: function () {
+                this.hello += '这个点击事件是通过缩写v-on指令"v-on:click"为"@click"的样式呈现的'
+            }
+        }
+    })
+    var vm6 = new Vue({
+        el: '#computed-property',
+        data: {
+            ok: false,
+            message: 'message1111',
+            ip: '这里是ip地址',
+            address: 'hellossssss'
+        },
+        computed: {
+            message2: function () {
+                return 'message22222222' + this.message
+            },
+            message3: {
+                // getter
+                get: function () {
+                    return 'message333333'
+                },
+                // setter
+                set: function (newValue) {
+                    this.message = newValue
+                }
+            }
+        },
+        watch: {
+            ip: function (newValue) {
+
+                if (newValue.indexOf('!') > 0) {
+                    var ip2 = newValue.split('!')[0]
+                    // TODO 遇到了跨域问题，还是不太明白！！！！！！！
+                    axios.get('https://bird.ioliu.cn/v1?url=' + 'http://ip.taobao.com/service/getIpInfo.php?ip=' + ip2).then(function (response) {
+                        console.log(response)
+                    }).catch(function (error) {
+                        console.log(error)
+                    })
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>

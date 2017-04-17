@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单控件绑定</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+
+<div id="app1">
+    <textarea v-model="message"></textarea>
+    <textarea v-model="message"></textarea>
+    <input type="checkbox" v-model="isChecked" id="ccc">
+    <label for="ccc">{{ isChecked }}</label>
+
+    <input type="checkbox" id="l" value="linlinan" v-model="checkedNames">
+    <label for="l">楠哥</label>
+    <input type="checkbox" id="d" value="dqx" v-model="checkedNames">
+    <label for="d">邓强锡</label>
+    <input type="checkbox" id="y" value="yaochao" v-model="checkedNames">
+    <label for="y">超哥</label>
+    <span>checked names: {{ checkedNames }}</span>
+
+    <input type="radio" id="one" value="one" v-model="picked">
+    <label for="one">One</label>
+    <input type="radio" id="two" value="two" v-model="picked">
+    <label for="two">Two</label>
+    <span>{{ picked }}</span>
+
+    <br>
+    <select v-model="selected" multiple style="width: 50px;">
+        <option value="gg">A</option>
+        <option value="simida">B</option>
+        <option>C</option>
+        <option>D</option>
+    </select>
+    <span>selected:{{ selected }}</span>
+
+    <select v-model="selected2">
+        <option v-for="option in options" v-bind:value="option.value">
+            {{ option.text }}
+        </option>
+    </select>
+    <span>selected2:{{ selected2 }}</span>
+
+    <input type="checkbox" v-model="toggle" v-bind:true-value="a" v-bind:false-value="b">
+    <span>{{ toggle }}</span>
+
+    <input type="radio" v-model="pick" v-bind:value="c">
+    <span>{{ pick }}</span>
+
+    <select v-model="selected3">
+        <option v-bind:value="{number: 123}">123</option>
+    </select>
+    <span>{{ selected3 }}</span>
+    <span>{{ selected3.number }}</span>
+
+    <input v-model.lazy="msg">
+    <span>{{ msg }}</span>
+    <input v-model.number="age" type="number">
+    <span>{{ age }}</span>
+    <input v-model.trim="msg2">
+    <span>{{ msg2 }}</span>
+</div>
+
+<script>
+
+    var app1 = new Vue({
+        el: '#app1',
+        data: {
+            message: 'hello',
+            isChecked: false,
+            checkedNames: [],
+            picked: '',
+            selected: [],
+            selected2: '',
+            a: 'hello',
+            b: 'world',
+            c: 'pickvalaue',
+            toggle: '',
+            pick: '',
+            selected3: '',
+            msg: '',
+            msg2: '',
+            age: '',
+            options: [
+                {text: 'one', value: 'A'},
+                {text: 'two', value: 'B'},
+                {text: 'three', value: 'C'},
+                {text: 'four', value: 'D'},
+            ]
+        },
+        methods: {
+            say: function () {
+                if (this.isChecked) {
+                    alert('ggsimida - ' + this.isChecked)
+                } else {
+                    alert('simidagg - ' + this.isChecked)
+                }
+            },
+
+        }
+    })
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>列表渲染</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+<div id="app-1">
+    <ul>
+        <template v-for="(item, index) in items">
+            <!--<li v-for="(item, index) of items">-->
+            <li>
+                {{ parentMessage }} + {{ item.text }} + {{ index}}
+            </li>
+            <li>
+                gg思密达
+            </li>
+        </template>
+    </ul>
+    <span v-for="n in 10">
+        {{ n }}
+    </span>
+</div>
+
+<div id="app-2">
+    <input
+            v-model="newText"
+            v-on:keyup.enter="addNewText"
+            placeholder="add a text"
+    >
+    <ul>
+        <li
+                is="todo-item"
+                v-for="(item, index) in textList"
+                v-bind:title="item"
+                v-on:gg="textList.splice(index, 1)"
+        ></li>
+    </ul>
+</div>
+<div id="app-3">
+    <ul>
+        <li v-for="n in sortNumbers">{{ n }}</li>
+        <hr>
+        <li v-for="n in evenNumbers">{{ n }}</li>
+        <hr>
+        <li v-for="n in even(numbers)">{{ n }}</li>
+        <hr>
+        <template v-for="n in even(numbers)">
+            <li>{{ n }}</li>
+        </template>
+        <hr>
+        <li v-for="n in numbers">{{ n }}</li>
+        <hr>
+
+    </ul>
+</div>
+
+<script>
+    var vm1 = new Vue({
+        el: '#app-1',
+        data: {
+            items: [
+                {text: 'foo'},
+                {text: 'bar'}
+            ],
+            parentMessage: 'Parent'
+        }
+    })
+    Vue.component('todo-item', {
+        props: ['title'],
+        template: '<li>{{ title }}<button v-on:click="$emit(\'gg\')">X</button></li>'
+    })
+    var vm2 = new Vue({
+        el: '#app-2',
+        data: {
+            newText: '',
+            textList: []
+        },
+        methods: {
+            addNewText: function () {
+                this.textList.push(this.newText)
+                this.newText = ''
+            }
+        }
+    })
+    var vm3 = new Vue({
+        el: '#app-3',
+        data: {
+            numbers: [10, 1, 2, 3, 4, 5, 6]
+        },
+        computed: {
+            evenNumbers: function () {
+                return this.numbers.filter(function (number) {
+                    return number % 2 === 0
+                })
+            },
+            sortNumbers: function () {
+                this.numbers.sort()
+                return this.numbers
+            }
+        },
+        methods: {
+            even: function (numbers) {
+                return numbers.filter(function (number) {
+                    return number % 2 === 0
+                })
+            }
+        }
+    })
+</script>
+</body>
+</html>

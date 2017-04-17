@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>事件处理器</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+
+<div id="app-1">
+    <p>这个按钮呗点击了{{ totalCount }}次</p>
+    <button v-on:click="totalCount += 1">增加1</button>
+    <button v-on:click="onClick">增加1</button>
+    <button v-on:click="great">你好</button>
+    <button v-on:click="great($event)">你好</button>
+    <button v-on:click="say(name)">say my name</button>
+    <button v-on:click="warn('gg!', $event)">warn</button>
+</div>
+<div id="app-2">
+    <section id="section" @click.stop="clickme">
+        <div id="div" @click.self="clickme">
+            div
+                <span id="span" @click.capture="clickme">
+                    <p id="p" @click.once="clickme">
+                        用鼠标双击我，看看事件的传递真正顺序。
+                    </p>
+                </span>
+        </div>
+    </section>
+    <section id="section" @click="clickme">
+        <div id="div" @click="clickme">
+            div
+                <span id="span" @click="clickme">
+                    <p id="p" @click="clickme">
+                        用鼠标双击我，看看事件的传递真正顺序。
+                    </p>
+                </span>
+        </div>
+    </section>
+    <input @keyup="keycode">
+</div>
+<div id="app-3">
+
+</div>
+<script>
+    var app1 = new Vue({
+        el: '#app-1',
+        data: {
+            totalCount: 0,
+            name: 'Vue.js'
+        },
+        methods: {
+            onClick: function () {
+                this.totalCount += 1
+            },
+            great: function (event) {
+                alert('Hello' + this.name)
+                alert(event.target.tagName)
+                alert(event)
+            },
+            say: function (message) {
+                alert(message)
+            },
+            warn: function (message, event) {
+                alert(message)
+                alert(event)
+            }
+        }
+    })
+    var app2 = new Vue({
+        el: '#app-2',
+        methods: {
+            onClick: function (event) {
+                console.log(event + 'onClick')
+            },
+            onClick2: function (event) {
+                console.log(event + 'onClick2')
+            },
+            clickme: function (event) {
+                console.log(event.currentTarget.id)
+            },
+            keycode: function (event) {
+                console.log(event.keyCode)
+            }
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>条件渲染</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+<div id="app-1">
+    <p v-if="ok">hello v-if</p>
+    <h1 v-else>hello v-else</h1>
+    <template v-if="ok2">
+        <h2>hello template</h2>
+        <h2>hello template</h2>
+        <h2>hello template</h2>
+        <h2>hello template</h2>
+        <h2>hello template</h2>
+        <h2>hello template</h2>
+        <h2>hello template</h2>
+    </template>
+    <h3 v-else>gg si mi da</h3>
+    <template v-if="ok3">
+        <h1>v-if</h1>
+    </template>
+    <template v-else-if="ok4">
+        <h1>v-else-if</h1>
+    </template>
+    <template v-else>
+        <h1>v-else</h1>
+    </template>
+</div>
+<div id="app-2">
+    <template v-if="loginType === 'username'">
+        <label>Username</label>
+        <input placeholder="请输入用户名" key="username-input">
+    </template>
+    <template v-else>
+        <label>Email</label>
+        <input placeholder="请输入邮箱" key="email-input">
+    </template>
+    <br>
+    <button @click="onClick">点击切换登录方式</button>
+</div>
+<div id="app-3">
+    <p v-show="ok">hello</p>
+</div>
+<script>
+    var vm1 = new Vue({
+        el: '#app-1',
+        data: {
+            ok: true,
+            ok2: true,
+            ok3: true,
+            ok4: true,
+        }
+    })
+    var vm2 = new Vue({
+        el: '#app-2',
+        data: {
+            loginType: 'username'
+        },
+        methods: {
+            onClick: function () {
+                this.loginType = 'username' === this.loginType ? '' : 'username'
+            }
+        }
+    })
+    var vm3 = new Vue({
+        el: '#app-3',
+        data: {
+            ok: true
+        }
+    })
+</script>
+</body>
+</html>
