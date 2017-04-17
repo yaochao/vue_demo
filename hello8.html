@@ -33,7 +33,23 @@
     <custom-input v-model="price"></custom-input>
 </div>
 
+<div id="app-5">
+    <parent-component></parent-component>
+</div>
+
 <script>
+
+    Vue.component('child-component', {
+        template: '<div><h2>这是子组件的标题</h2><slot>只有在没有要分发的内容时才会显示</slot></div>'
+    })
+
+    Vue.component('parent-component', {
+        template: '<div><h1>我是父组件的标题</h1><child-component><p>这是一些内容</p></child-component></div>'
+    })
+
+    var app5 = new Vue({
+        el: '#app-5'
+    })
 
     Vue.component('custom-input', {
         template: '<span><input ref="input" v-bind:value="value" v-on:input="updateValue($event.target.value)"></span>',
