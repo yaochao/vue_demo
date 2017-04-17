@@ -16,10 +16,49 @@
 
 <div id="app-2">
     <my-component2></my-component2>
+    <input v-model="parentMsg">
+    <child :message="parentMsg"></child>
+    <child message2="1"></child>
 </div>
 
+<div id="app-3">
+    <p>{{ total }}</p>
+    <button-counter v-on:hello="incrementTotal"></button-counter>
+    <button-counter v-on:hello="incrementTotal"></button-counter>
+    <button-counter v-on:click.native="hello"></button-counter>
+</div>
+
+<div id="app-4">
+    <p>{{ price }}</p>
+    <custom-input v-model="price"></custom-input>
+</div>
 
 <script>
+
+    Vue.component('custom-input', {
+        template: '<span><input ref="input" v-bind:value="value" v-on:input="updateValue($event.target.value)"></span>',
+        props: ['value'],
+        methods: {
+            updateValue: function (value) {
+                // 对输入的value进行格式化为想要的格式
+                var formattedValue = value.trim().slice(0, value.indexOf('.') + 3)
+                // 如果数值不统一，手动覆盖以保持一致
+                if (formattedValue !== value) {
+                    this.$refs.input.value = formattedValue
+                }
+                // 通过input事件触发数值
+                this.$emit('input', Number(formattedValue))
+            }
+        }
+    })
+
+    var app4 = new Vue({
+        el: '#app-4',
+        data: {
+            price: 0
+        }
+    })
+
 
     var data = {counter: 0}
     Vue.component('my-component', {
@@ -28,9 +67,55 @@
             return {
                 counter: 0
             }
-//            return data
         }
     })
+
+    Vue.component('child', {
+        props: ['message', 'message2'],
+        template: '<span>{{ typeof message2 }}</span>',
+        data: function () {
+            bus.$on('input', function (value) {
+                console.log(value)
+            })
+            return {
+                gg: 'ggsimida'
+            }
+        }
+    })
+
+    var bus = new Vue()
+
+    Vue.component('button-counter', {
+        template: '<button v-on:click="increment">{{ counter }}</button>',
+        data: function () {
+            return {
+                counter: 0
+            }
+        },
+        methods: {
+            increment: function () {
+                this.counter += 1
+                this.$emit('hello')
+                bus.$emit('input', 99)
+            }
+        }
+    })
+
+    var app3 = new Vue({
+        el: '#app-3',
+        data: {
+            total: 0
+        },
+        methods: {
+            incrementTotal: function () {
+                this.total += 1
+            },
+            hello: function () {
+                console.log('hello!')
+            }
+        }
+    })
+
     var app1 = new Vue({
         el: '#app-1',
         data: {}
@@ -38,9 +123,13 @@
 
     var app2 = new Vue({
         el: '#app-2',
+        data: {
+            parentMsg: 'this is a parent message'
+        },
         components: {
             'my-component2': {
-                template: '<div>my component 2</div>'
+                template: '<div>my component 2 </div>',
+
             }
         }
     })
