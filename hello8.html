@@ -60,7 +60,7 @@
 </div>
 
 <div id="app-9">
-    <component :is="currentView" @click.native="onClick"><span>点我换颜色</span></component>
+    <keep-alive><component :is="currentView" @click.native="onClick"><span>点我换颜色</span></component></keep-alive>
     <input @change="changeInput($event.target.value)">
 </div>
 
