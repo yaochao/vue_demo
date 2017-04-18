@@ -37,7 +37,61 @@
     <parent-component></parent-component>
 </div>
 
+<div id="app-6">
+    <hello></hello>
+</div>
+
+<div id="app-7">
+
+    <my-awesome-list v-bind:items="items">
+        <template slot="item" scope="props">
+            <li class="my-fancy-item">{{ props.text }}</li>
+        </template>
+    </my-awesome-list>
+</div>
+
+<div id="app-8">
+    <child>
+        <template scope="props">
+            <p>this is the parent text</p>
+            <p>{{ props.text }}</p>
+        </template>
+    </child>
+</div>
+
 <script>
+
+    Vue.component('child', {
+        template: '<div class="child"><slot text="this is the slot text"></slot></div>'
+    })
+
+    var app8 = new Vue({
+        el: '#app-8'
+    })
+
+    Vue.component('my-awesome-list', {
+        props: ['items'],
+        template: '<ul><slot name="item" v-for="item in items" v-bind:text="item"></slot></ul>'
+    })
+
+    var app7 = new Vue({
+        el: '#app-7',
+        data: {
+            items: ['asdf', 'asdfasdfasdfasdfasfd', 'hello']
+        }
+    })
+
+    Vue.component('hello', {
+        template: '<app><h1 slot="header">This is the header</h1><p>this is the main content</p><p slot="footer">this is the footer</p></app>'
+    })
+
+    Vue.component('app', {
+        template: '<div class="container"><header><slot name="header"></slot></header><main><slot></slot></main><footer><slot name="footer"></slot></footer></div>'
+    })
+
+    var app6 = new Vue({
+        el: '#app-6'
+    })
 
     Vue.component('child-component', {
         template: '<div><h2>这是子组件的标题</h2><slot>只有在没有要分发的内容时才会显示</slot></div>'
