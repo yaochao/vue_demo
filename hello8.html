@@ -59,7 +59,45 @@
     </child>
 </div>
 
+<div id="app-9">
+    <component :is="currentView" @click.native="onClick"><span>点我换颜色</span></component>
+    <input @change="changeInput($event.target.value)">
+</div>
+
 <script>
+    var Templates = {
+        green: {
+                template: '<div style="width: 50px; height: 50px; background-color: green;"><slot></slot></div>',
+            },
+        red: {
+                template: '<div style="width: 50px; height: 50px; background-color: yellow;"><slot></slot></div>'
+            }
+    }
+
+    var app9 = new Vue({
+        el: '#app-9',
+        data: {
+//            currentView: 'green',
+            currentView: Templates.green
+        },
+        methods: {
+            onClick: function () {
+//                this.currentView = this.currentView === 'green' ? 'red' : 'green'
+                this.currentView = this.currentView === Templates.green ? Templates.red : Templates.green
+            },
+            changeInput: function (v) {
+                this.currentView = v
+            }
+        },
+        components: {
+            green: {
+                template: '<div style="width: 50px; height: 50px; background-color: green;"><slot></slot></div>',
+            },
+            red: {
+                template: '<div style="width: 50px; height: 50px; background-color: red;"><slot></slot></div>'
+            }
+        }
+    })
 
     Vue.component('child', {
         template: '<div class="child"><slot text="this is the slot text"></slot></div>'
